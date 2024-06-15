@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIPHY SEARCH</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background-color:white;
+            margin: 0;
+        }
+
+        header {
+        background-color:black;
+        overflow: hidden;
+        padding: 10px 20px;
+        color:white;
+      }
+        .Giphy img{
+            width:100px;
+            height:100px;
+        }
+        .navigation a{
+     position:relative;
+     font-size:1.1em;
+     color:#fff;
+     text-decoration:none;
+     font-weight:500;
+     margin-left:40px;
+ }
+ .navigation a::after{
+     content:'';
+     position:absolute;
+     left:0;
+     bottom:-6px;
+     width: 100%;
+     height:3px;
+     background:#fff;
+     border-radius:5px;
+     transform-origin:right;
+     transform:scaleX(0);
+     transition:transform.5s;
+ }
+ .navigation a:hover::after{
+     transform-origin:left;
+    transform:scaleX(1);
+ }
+
+        #gif-container {
+            display: flex;
+            flex-wrap: wrap;
+            grid-template-columns: max-content;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        input {
+            font-size: 16px;
+            padding: 10px;
+            margin: 20px;
+        }
+
+        button {
+            font-size: 16px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #216c25;
+        }
+    </style>
+</head>
+<body>
+   
+    <header>
+        <ul><div class="Giphy"><img src="Giphy.png"></div></ul>   
+    <h1>GIPHY SEARCH</h1>
+    <nav class="navigation">   
+        <a href="#">HOME</a>
+        <a href="#">ABOUT</a>
+        <a href="#">SERVICES</a>
+        <a href="#">CONTACT</a>
+        <a href="favour.html">FAVOURITES</a>
+    </nav></header>
+    <input type="text" id="searchInput" placeholder="Enter search term">
+    <button onclick="searchGiphy()">Search</button>
+    <div id="gif-container"></div>
+
+    <script>
+        const apiKey = 'AVKZvDKaZ0HYBAmQHGtXZmrSDUsRTe4A'; 
+        const apiUrl = 'https://api.giphy.com/v1/gifs/search';
+
+        function searchGiphy() {
+            const searchInput = document.getElementById('searchInput').value.trim();
+            const gifContainer = document.getElementById('gif-container');
+            gifContainer.innerHTML = '';
+            const url = `${apiUrl}?api_key=${apiKey}&q=${searchInput}&limit=12`;
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    data.data.forEach(gif => {
+                        const imgElement = document.createElement('img');
+                        imgElement.src = gif.images.fixed_height.url;
+                        imgElement.alt = gif.title;
+                        gifContainer.appendChild(imgElement);
+                    });
+                })
+                .catch(error => console.error('Error fetching GIFs:', error));
+        }
+    </script>
+</body>
+</html>
